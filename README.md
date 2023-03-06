@@ -1,4 +1,4 @@
-# Remote-Control-Robot
+# Remote Control Robot
 
 ## Description
 Project included building and programming a robot that was controlled by sending commands via a wireless gamepad to a computer that was mounted on to the robot. The computer on the robot had a wireless receiver connected to a USB port that was linked with the gamepad. When the gamepad sent a command, the computer would receive the command and transmit it to a module via serial communication that was responsible for the carrying out the designated commands. 
