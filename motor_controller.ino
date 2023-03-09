@@ -4,7 +4,7 @@
  * There is also a heartbeat function that shuts all the motors off if a command is not received from the main computer in a designated amount of time.
  * There are also 4 GPIO pins that have been initialized to control relay switches. They that can be configured to perform any other task(such as a flashlight).
  * 
- * This program sends command to a Kangaroo x2 motor controller in order to drive the motors. This is done by using the Kangaroo library created by 
+ * This program sends commands to a Kangaroo x2 motor controller in order to drive the motors. This is done by using the Kangaroo library created by 
  * Dimension Engineering.
  */
 
