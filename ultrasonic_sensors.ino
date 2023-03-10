@@ -130,7 +130,10 @@ void loop() {
   delay(250); // every 250 msec, read all sensors
   if (Serial.available()) {
     char com = Serial.read();
-    if (com == 'y') {
+    if (com == 'a') {
+      Serial.println(read_all_sensors());
+    }
+    else if (com == 'y') {
       Serial.println(check_front_obstacle());
     } 
     else if (com == 'h') {
