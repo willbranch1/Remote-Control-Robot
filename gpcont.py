@@ -1,3 +1,8 @@
+#This program acts as the main brain for the robot. It listens to commands from the gampad controller, and relays them in the correct format to the motor 
+#controller module. It also keeps in constant communication with the ultrasonic sensors to make sure no object comes to close to the robot.
+#
+#Two threads are opened in order to simultaniously communicate with every module without sacrificing any speed. The two threads communicate via a queue.
+
 from inputs import get_gamepad
 from inputs import get_key
 import serial
@@ -7,14 +12,16 @@ from threading import Thread
 
 mtr = serial.Serial(port='/dev/ttyUSB0', baudrate=115200, timeout=0.1)
 uss = serial.Serial(port='/dev/ttyUSB1', baudrate=115200, timeout=0.1)
-time.sleep(5)
-print('setup')
+time.sleep(5) #sleeps so thaat the serial ports have time to perform proper handshaking
 
+#this thread receives data from the gamepad and formats it before placing it into a queue for the second thread to use
 def gamepad_receiver():
     deadband = 3
     middle = 128
     prev_time = time.time_ns()
 
+    #the controller sends a range of 0-255 for the stick position
+    #this function converts that range to a percentage that the motor module can use
     def calc_percent(state):
         if state < (middle - deadband):
             percent = (middle - state) / middle
@@ -22,6 +29,8 @@ def gamepad_receiver():
             percent = (state - middle) / middle
         return int(percent * 100)
 
+    #main loop in this thread
+    #reads, formats, and adds data from the gamepad to a queue that the other thread will access
     while 1:
         events = get_gamepad()
         for event in events:
@@ -56,6 +65,9 @@ def gamepad_receiver():
 
                 prev_time = time.time_ns()
 
+#this thread communicates with all the modules on the robot
+#it checks the queue to see if thread 1 had input any info from the gamepad and, if there is any data, it sends a message to the motor controller module
+#it also stays in contact with the ultrasonic sensors to make sure no objects are in the path of the robot and, if there is any objects, it stops the robot
 def communicator():
     state = 0
     dstop = 'F000'
@@ -90,8 +102,9 @@ def communicator():
             mtr.write(tstop.encode('utf-8'))
             state = 0
 
+#the main function just opens up the above threads
 if __name__ == '__main__':
-    q = queue.Queue()
+    q = queue.Queue() #this is the queue that the two threads will be working from
     t1 = Thread(target=gamepad_receiver)
     t2 = Thread(target=communicator)
     t1.start()
