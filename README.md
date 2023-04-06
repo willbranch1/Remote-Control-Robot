@@ -7,7 +7,7 @@ The two modules that are present are the drive module and the sensor module. The
 
 Continued work sees me adding a compass as well as a camera. While the robot is able to be programmed and drive autonomously for a period of time, it does not have full autonomy. The compass module would allow the robot to maneuver on its own based on its coordinates. The camera will be used to allow for the tracking of an object, such as a red ball. 
 
-## Languages Used
+## Technology Used
 - Python
 - C++
 - Arduino
